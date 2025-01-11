@@ -9,8 +9,23 @@ class Conversation extends Model
 {
     use HasFactory;
 
-    public function user()
+    protected $fillable = [
+        'converser_1',
+        'converser_2',
+    ];
+
+    public function messages()
     {
-        return $this->belongsTo(User::class, 'friend_id');
+        return $this->hasMany(Message::class);
+    }
+
+    public function converser1()
+    {
+        return $this->belongsTo(User::class, 'converser_1', 'id');
+    }
+
+    public function converser2()
+    {
+        return $this->belongsTo(User::class, 'converser_2', 'id');
     }
 }

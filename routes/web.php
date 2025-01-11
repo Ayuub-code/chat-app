@@ -5,6 +5,7 @@ use App\Http\Controllers\ConversationConstroller;
 use App\Http\Controllers\CoverController;
 use App\Http\Controllers\FriendController;
 use App\Http\Controllers\FriendSuggestionController;
+use App\Http\Controllers\MessageController;
 use App\Http\Controllers\Profile_picsController;
 use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\UserController;
@@ -29,9 +30,9 @@ Route::get('/user/profilepics', [UserController::class, 'profile_pics'])->name('
 Route::post('/user/profilepics', [UserController::class, 'pics'])->name('picture');
 Route::get('hold/route', [UserController::class, 'hold_pics'])->name('route');
 
-Route::get('send/message/{id}', [ChatController::class, 'message'])->name('Sent');
-Route::post('send/message/{id}', [ChatController::class, 'Send_message'])->name('send');
-// Route::get('/chat/room', [ChatController::class,, 'loggin_page'])->name('Openchat');
+Route::get('conversation', [MessageController::class, 'message'])->name('Sent');
+Route::post('conversation/{id}', [MessageController::class, 'store'])->name('send');
+Route::get('/chat', [ChatController::class, 'conversations'])->name('conversations');
 
 
 Route::middleware(['auth'])->group(function () {

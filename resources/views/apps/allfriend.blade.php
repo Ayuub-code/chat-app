@@ -16,11 +16,10 @@
 
 <body>
     @foreach ($friends as $friend)
-        <a href="{{ route('add_friend', ['id' => $friend->user->id]) }}"></a>
+        <a href="{{ route('Sent', ['friend' => $friend->user->id]) }}">{{ $friend->user->name }}
+        </a>
         <br>
-        <a href="{{ route('Sent', ['id' => $friend->user->id]) }}">{{ $friend->user->name }}</a>
-        <br>
-        <img src="{{ $friend->user->profile_pics }}" width="20" height="30" alt="" />
+        <img src={{ '/' . $friend->user->profile_pics }} width="20" height="30" alt="" />
     @endforeach
 </body>
 </head>

@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Models\Chat;
+use App\Models\Conversation;
 use App\Models\Friend;
 use App\Models\User;
 use Illuminate\Http\Request;
@@ -10,48 +11,18 @@ use Illuminate\Support\Facades\Auth;
 
 class ChatController extends Controller
 {
-    public function message(Request $request, $id)
+    public function conversations()
     {
         $user = Auth::user();
 
-        $friend = User::query()
-            ->where('id', $id)
-            ->firstOrFail();
-
-        $chats = Chat::query()
-            ->where('friend_id', $id)
-            ->where('user_id', $user->id)
-            ->orWhere('friend_id', $user->id)
-            ->where('user_id', $id)
-            ->with(['friend'])
+        $conversations = Conversation::query()
+            ->where('converser_1', $user->id)
+            // ->orWhere('converser_2', $user->id)
+            ->with(['converser1' => fn($query) => $query->withCount('unreadMessages'), 'converser2'])
             ->get();
 
-        return view('apps.acct', compact('chats'), [
-            'friend_id' => $id,
-            'friend' => $friend,
+        return view('apps.conversations', compact('conversations'), [
+            'user' => $user,
         ]);
     }
-    public function Send_message(Request $request, $id)
-    {
-        $user = Auth::user();
-        if ($request->has('image')) {
-            $fileName = $request->file('image')->store('images');
-        }
-        $chat = new Chat();
-        $chat->messages = $request->messages;
-        $chat->user_id = $user->id;
-        $chat->friend_id = $id;
-        $chat->images = $fileName ?? null;
-        $chat->save();
-        return redirect()->back();
-    }
-    // public function loggin_page($id)
-    // {
-    //     $user = Auth::user();
-
-    //     $chat = new Chat();
-    //     $chat->message = $user->id;
-    //     $chat->friend_id = $id;
-    //     return view('apps.chat');
-    // }
 }

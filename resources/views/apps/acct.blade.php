@@ -18,19 +18,19 @@
     </style>
 
 <body>
-    <b>Chat with {{ $friend->name }}</b><br /><br />
-    @foreach ($chats as $chat)
+    <b>Chat with {{ $receiver->name }}</b><br /><br />
+    @foreach ($messages as $message)
         <b>
-            {{ $chat->user->name }} {{ $chat->user->id === auth()->id() ? '(Me)' : '' }}
+            {{ $message->sender->name }} {{ $message->sender->id === auth()->id() ? '(Me)' : '' }}
         </b>:
         <br />
-        {{ $chat->messages }}
+        {{ $message->message }}
         <br />
         <br />
     @endforeach
 
     <br /><br />
-    <form action="{{ route('send', ['id' => $friend_id]) }}" method="POST" enctype="multipart/form-data">
+    <form action="{{ route('send', ['id' => $receiver->id]) }}" method="POST" enctype="multipart/form-data">
         @csrf
         {{-- <input type="hidden" name="friend_id" value="{{ $friend_id }}"> --}}
         <input type="text" name="messages" placeholder="type here">
